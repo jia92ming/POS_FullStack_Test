@@ -6,8 +6,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { CartSelection } from '../shared-types';
 import { ConfirmCartAction, CancelCartAction, OnErrorPage } from '../shared-actions';
-import { ifError } from 'assert';
-import redirect from '../redirect_page/page';
+import { redirect } from "next/navigation";
 
 // import { useEffect, useState, useRef } from 'react'; //can't use without "use client";
 
