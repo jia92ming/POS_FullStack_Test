@@ -153,7 +153,8 @@ export const SaleTrendButtonAction = async () => {
 export async function InsertCartAction (formData:FormData){
   const supabase = await createClient();
   
-  var updates = formData.values().toArray(); //fetch input box values which is sorted according to item.id
+  var updates = null;
+  updates = formData.values().toArray(); //fetch input box values which is sorted according to item.id
   if (updates[0]=='') {updates.shift()}; //remove first element if form data returns '' in front (sometimes) 
   // console.log(updates)
   const selected_user = updates[0];
@@ -170,7 +171,8 @@ export async function InsertCartAction (formData:FormData){
       // fetch and add the qty_onhold in the item table:
       const { data } = await supabase.from('table_items').select("qty_on_hold");
       const items = data as Items[];
-      var new_qty = Number(updates[x]) + Number(items[x-1]["qty_on_hold"]); //array, id need to -1
+      var new_qty = 0;
+      new_qty = Number(updates[x]) + Number(items[x-1]["qty_on_hold"]); //array, id need to -1
       const { error:e2 } = await supabase.from('table_items').update({qty_on_hold: new_qty}).eq('id', x);
       if (e2) {console.log ('error:', e2)};
 
@@ -182,9 +184,10 @@ export async function InsertCartAction (formData:FormData){
 
 export async function ConfirmCartAction (formData:FormData){
   const supabase = await createClient();
-  
-  var updates = formData.values().toArray(); //fetch input box values which is sorted according to id
-  var fields = formData.keys().toArray(); //fields gives the 'name' of input box, tag to cart.id
+  var updates = null;
+  var fields = null;
+  updates = formData.values().toArray(); //fetch input box values which is sorted according to id
+  fields = formData.keys().toArray(); //fields gives the 'name' of input box, = to cart.id
 
   //remove first element if form data returns '' in front (sometimes)
   if (updates[0]=='') {updates.shift(); fields.shift();};
@@ -216,12 +219,14 @@ export async function ConfirmCartAction (formData:FormData){
         .eq('id', fields[x]);
       if (e7) {console.log ('error:', e7)};
 
-      // fetch current item qty_in_stock:
+      // fetch current item qty_in_stock and qty-on_hold:
       const { data:d4, error:e4 } = await supabase.from('cart_selection')
-        .select('item_id, table_items(qty_in_stock,qty_on_hold)')
+        .select('*, table_items(qty_in_stock,qty_on_hold)')
         .eq('id', fields[x]);
-      const carts = d4 as unknown as CartSelection[]; // works the same if d4 is used
+      const carts = d4 as CartSelection[];
       if (e4) {console.log ('error:', e4)};
+      
+      
 
       // minus and update qty_in_stock in the item table:
       const { error:e5 } = await supabase.from('table_items')
@@ -230,9 +235,11 @@ export async function ConfirmCartAction (formData:FormData){
         .eq('id', carts[x-2]["item_id"]);
       if (e5) {console.log ('error:', e5)};
 
-      // Remove qty_on_hold in the item table after order confirmed if exsisting hold is non-zero:
-      var new_qty = Number(carts[x-2]["table_items"]["qty_on_hold"]);
-      if (new_qty != 0) {new_qty -= Number(updates[x])}; 
+      // Remove qty_on_hold in the item table after order confirmed:
+      var new_qty = 0;
+      new_qty = Number(carts[x-2]["table_items"]["qty_on_hold"]);
+      new_qty = new_qty - Number(updates[x]);
+
       const { error:e2 } = await supabase.from('table_items')
         .update({qty_on_hold: new_qty})
         .eq('id', carts[x-2]["item_id"]);
@@ -247,7 +254,7 @@ export async function ConfirmCartAction (formData:FormData){
   }
   console.log("ORDER SENT SUCCESSFUL !");
 
-  return redirect("/shop-now-page")
+  return redirect("/shop-now-page");
 }
 
 export async function CancelCartAction (formData:FormData){
@@ -257,13 +264,34 @@ export async function CancelCartAction (formData:FormData){
   //remove first element if form data returns '' in front (sometimes)
   if (updates[0]=='') {updates.shift()};
   const selected_user = updates[0];
+  var fields = formData.keys().toArray(); //fields gives the 'name' of input box, tag to cart.id
+
+  //actual data starts from updates[2],[0] = user_id, [1] = total amount
+  for (var x = 2 ; x < updates.length ; x++){
+      // fetch current item qty-on_hold:
+      const { data:d4, error:e4 } = await supabase.from('cart_selection')
+      .select('item_id, table_items(qty_on_hold)')
+      .eq('id', fields[x]);
+    const carts = d4 as unknown as CartSelection[]; // works the same if d4 is used
+    if (e4) {console.log ('error:', e4)};
+
+    // Remove qty_on_hold in the item table after order confirmed
+    var new_qty = 0;
+    new_qty = Number(carts[x-2]["table_items"]["qty_on_hold"]); //current qty
+    new_qty = new_qty - Number(updates[x]);
+    const { error:e2 } = await supabase.from('table_items')
+      .update({qty_on_hold: new_qty})
+      .eq('id', carts[x-2]["item_id"]);
+    if (e2) {console.log ('error:', e2)};
+  }
 
   // delete all relevant rec from cart (Order_id = null in current selected customer id)
   const { error:e6 } = await supabase.from('cart_selection')
     .delete().is('order_id', null).eq('customer_id',selected_user);
   if (e6) {console.log ('error:', e6)};
   
-  return console.log("CANCELLED !")
+  console.log("CANCELLED !");
+  return redirect("/shop-now-page");
 }
 
 export async function EditItemAction (formData:FormData){
@@ -291,8 +319,8 @@ export async function EditItemAction (formData:FormData){
       .eq('id',item_id);
     if (e1) {console.log ('error:', e1)};
   }
-
-  return console.log("UPDATED !!")
+  console.log("UPDATED !!");
+  return redirect("/edit-items-page");
 }
 
 

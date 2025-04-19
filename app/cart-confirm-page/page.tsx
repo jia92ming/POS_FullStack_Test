@@ -5,7 +5,7 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { CartSelection } from '../shared-types';
-import { ConfirmCartAction, CancelCartAction, OnErrorPage } from '../shared-actions';
+import { ConfirmCartAction, CancelCartAction } from '../shared-actions';
 import { redirect } from "next/navigation";
 
 // import { useEffect, useState, useRef } from 'react'; //can't use without "use client";
@@ -22,6 +22,12 @@ export default async function CartConfrim(props:any) {
     const carts = d2 as CartSelection[];
     if (e2) {console.log ('error:', e2)};
 
+    // check records exist, redirect to redirect_page if unable to get cart records
+    if (carts.length == 0){
+      console.log("REDIRECTED DUE TO NO CART RECORDS FOUND FOR THAT CUSTOMER");
+      return redirect("/redirect_page");
+    }
+    
     // calculate total price in order cart:
     var total:number = 0.00;
     for (var x = 0 ; x < carts.length; x++){
@@ -29,15 +35,10 @@ export default async function CartConfrim(props:any) {
     }
     const amount = total.toFixed(2);
     
-    // check records exist, redirect to redirect_page if unable to get cart records
-    if (carts.length == 0){
-      console.log("REDIRECTED DUE TO NO CART RECORDS FOUND FOR THAT CUSTOMER");
-      return redirect("/shop-now-page");
-    }
     const cus_id = carts[0]["customer_id"];
     
     return ( // "cus_id", "total amount" are passed as hidden inputs to the on-click actions.
-      <><form action={ConfirmCartAction} onError={OnErrorPage}>
+      <><form action={ConfirmCartAction}>
         <h1 className="text-2xl font-bold mb-4"> ORDER CART </h1>
         <label>This is your current selection : (edit qty as required)</label>
         <input className="hidden" type="number" name={'cus_id'} defaultValue= {cus_id}></input>
@@ -77,7 +78,7 @@ export default async function CartConfrim(props:any) {
           </p>
         </div>
       </form>
-      <form action={CancelCartAction} onError={OnErrorPage}>
+      <form action={CancelCartAction}>
         <input className="hidden" type="number" name={'cus_id'} defaultValue= {cus_id}></input>
         <p> Or do you want to cancel this order? {" --->  "}
           <button type="submit"> CANCEL !</button>
