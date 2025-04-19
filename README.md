@@ -5,6 +5,8 @@ URL:https://pos-full-stack-test-40g0qf0s3-jia92mings-projects.vercel.app/
 
 This app uses Supabase with Next.js in TypeScript. A starter template is used from url (https://supabase.com/docs/guides/getting-started/quickstarts/nextjs)
 
+NEXT.JS + Supabase (PostgreSQL) in TypeScript
+
 [[ USER STORIES & REQUIREMENTS]]
 The User stories -> Requirements are as follow:
 
