@@ -5,11 +5,6 @@ URL:https://pos-full-stack-test-40g0qf0s3-jia92mings-projects.vercel.app/
 
 This app uses Supabase with Next.js in TypeScript. A starter template is used from url (https://supabase.com/docs/guides/getting-started/quickstarts/nextjs)
 
-[[ ISSUES ]]
-- Currently Quantity updating after Cart Confirmation failed after deployment.
-- On-Hold quantity also failed after deployment.
-- Item Edit page did not fully update all fields.
-
 [[ USER STORIES & REQUIREMENTS]]
 The User stories -> Requirements are as follow:
 
@@ -61,6 +56,11 @@ my-app
 The following are the Database table design and Relations:
 
 <img alt="Database Schema" src="https://github.com/jia92ming/POS_FullStack_Test/blob/main/supabase-schema-pos-test.png">
+
+[[ ISSUES ]]
+- Currently Quantity left updating after Cart Confirmation did not update correctly after deployment. It will produce an app error.
+- On-Hold quantity also updated incorrectly.
+- Item Edit page did not fully update all fields. This will produce app error.
 
 [[ IMPROVEMENTS TO BE MADE ]]
 Following are things that can be better in this app project:
