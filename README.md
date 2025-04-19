@@ -1,104 +1,70 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# POS_FullStack_Test (For Test)
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+[[ Deployment ]]
+URL:https://pos-full-stack-test-40g0qf0s3-jia92mings-projects.vercel.app/
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+This app uses Supabase with Next.js in TypeScript. A starter template is used from url (https://supabase.com/docs/guides/getting-started/quickstarts/nextjs)
 
-## Features
+[[ ISSUES ]]
+- Currently Quantity updating after Cart Confirmation failed after deployment.
+- On-Hold quantity also failed after deployment.
+- Item Edit page did not fully update all fields.
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+[[ USER STORIES & REQUIREMENTS]]
+The User stories -> Requirements are as follow:
 
-## Demo
+Customers
+-------------------
+1. As a customer, I want to see a list of fruits that are available to buy (complete with stock and pricing information), so that I can decide which fruits I want to buy.
+--> Have a page that shows table of item details.
+   
+2. As a customer, I want to keep track of the fruits and quantity that I have shortlisted (including the total amount I need to pay), so that I can adjust my purchasing decisions as I shop.
+--> View selection when browsing item list.
+--> Interface to add/remove items from selection.
+--> Show and Update total price for selections.
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+3. As a customer, I want to submit my order of the fruits I selected, so that I can complete my purchase when I am done shopping. Assume that payment is done separate from this POS application.
+--> Interface to direct user to "Check Out" page for further processing.
 
-## Deploy to Vercel
+Owner
+----------
+4. As an owner, I want to see the orders that my customers have submitted, so that I can fulfill their orders.
+--> Have a page that shows table of orders.
+--> Orders to reflect status "Delivered/Paid/Unpaid" for owner to action.
 
-Vercel deployment will guide you through creating a Supabase account and project.
+6. As an owner, I want to be able to add new fruits and amend my stock levels, so that I can keep my online store up to date.
+--> Have a page with interface to INSERT, UPDATE and DELETE item record entries.
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+[[ FRONTEND DESIGN ]]
+The following are the notes for page interface design:
+- Client Side components like 'useState()', 'useRef()', etc gave errors when rendering pages.
+- This project only used Sever side components to achieve the purpose of the app.
+- The Home page will have options for user to select.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+The following are folder structure for the project that were created:
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+my-app
+|__ app
+.    |___ all-orders-page  ----- page.tsx <- for owners to see all records
+.    |___ cart-confirm-page  --- page.tsx <- 2nd step of Order confirmation (redirected from 'shop-now-page')
+.    |___ edit-add-items-page -- page.tsx
+.    |___ edit-items-page  ----- page.tsx
+.    |___ redirect_page  ------- page.tsx
+.    |___ sale-trend-page  ----- page.tsx
+.    |___ see-cart-page  ------- page.tsx
+.    |___ shop-now-page  ------- page.tsx
+.    |___ page.tsx	<-------------------- Home Page
+.    |___ shared-actions.ts
+.    |___ shared-types.ts
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+[[ BACKEND DESIGN ]]
+The following are the Database table design and Relations:
 
-## Clone and run locally
+<img alt="Database Schema" src="https://github.com/jia92ming/POS_FullStack_Test/blob/main/supabase-schema-pos-test.png">
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
-
-2. Create a Next.js app using the Supabase Starter template npx command
-
-   ```bash
-   npx create-next-app --example with-supabase with-supabase-app
-   ```
-
-   ```bash
-   yarn create next-app --example with-supabase with-supabase-app
-   ```
-
-   ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
-
-3. Use `cd` to change into the app's directory
-
-   ```bash
-   cd with-supabase-app
-   ```
-
-4. Rename `.env.example` to `.env.local` and update the following:
-
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
-
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
-
-5. You can now run the Next.js local development server:
-
-   ```bash
-   npm run dev
-   ```
-
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
-
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
-
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
-
-## Feedback and issues
-
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
-
-## More Supabase examples
-
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+[[ IMPROVEMENTS TO BE MADE ]]
+Following are things that can be better in this app project:
+- For Loops are used in fetching of Update can be better to resolve complexity
+- User authentications
+- Client components for better interactivity
+- overall, very buggy and laggy
