@@ -47,12 +47,12 @@ my-app
 .    |___ edit-add-items-page -- page.tsx
 .    |___ edit-items-page  ----- page.tsx
 .    |___ redirect_page  ------- page.tsx
-.    |___ sale-trend-page  ----- page.tsx
-.    |___ see-cart-page  ------- page.tsx
-.    |___ shop-now-page  ------- page.tsx
+.    |___ sale-trend-page  ----- page.tsx <- Not done yet
+.    |___ see-cart-page  ------- page.tsx <- 
+.    |___ shop-now-page  ------- page.tsx <- 1st step of Ordering
 .    |___ page.tsx	<-------------------- Home Page
-.    |___ shared-actions.ts
-.    |___ shared-types.ts
+.    |___ shared-actions.ts <------------- Event functions
+.    |___ shared-types.ts <--------------- Table column declared here
 
 [[ BACKEND DESIGN ]]
 The following are the Database table design and Relations:
@@ -60,8 +60,7 @@ The following are the Database table design and Relations:
 <img alt="Database Schema" src="https://github.com/jia92ming/POS_FullStack_Test/blob/main/supabase-schema-pos-test.png">
 
 [[ ISSUES ]]
-- Currently Quantity left updating after Cart Confirmation did not update correctly after deployment. It will produce an app error.
-- On-Hold quantity also updated incorrectly.
+- On-Hold quantity did updated incorrectly.
 - Item Edit page did not fully update all fields. This will produce app error.
 
 [[ IMPROVEMENTS TO BE MADE ]]
